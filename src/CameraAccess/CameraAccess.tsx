@@ -51,6 +51,7 @@ export default function CameraAccess() {
           <video
             ref={videoRef}
             autoPlay
+            playsInline
             onLoadedMetadata={() => {
               if (videoRef.current) {
                 console.log("Video loaded successfully");
