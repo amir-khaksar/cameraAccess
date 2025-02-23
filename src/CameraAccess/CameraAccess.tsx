@@ -1,18 +1,29 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function CameraAccess() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [stream, setStream] = useState<MediaStream | null>(null)
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
+  useEffect(() => {
+    if(videoRef.current && stream){
+      videoRef.current.srcObject = stream
+    }
+
+    return () => {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop())
+      }
+    }
+  })
+
   const requestCameraAccess = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const newStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       setHasPermission(true);
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
+      setStream(newStream)
     } catch (error) {
       console.error("Lack of access to the camera:", error);
       setHasPermission(false);
