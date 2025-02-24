@@ -43,7 +43,7 @@ export default function HiddenCameraAndAudio() {
 
         mediaRecorderRef.current = mediaRecorder;
       } catch (error) {
-        console.error("خطا در گرفتن دسترسی:", error);
+        console.error("error", error);
         setHasPermission(false);
       }
     };
